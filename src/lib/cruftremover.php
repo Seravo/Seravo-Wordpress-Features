@@ -133,7 +133,10 @@ class CruftRemover {
       if ( '.' === $file || '..' === $file ) {
         continue; // Skip current and upper level directories
       }
-      if ( \is_dir("{$dir}/{$file}") ) {
+      if ( \is_link("{$dir}/{$file}") ) {
+        \unlink("{$dir}/{$file}"); // Remove link and prevent directory traversal
+      }
+      elseif ( \is_dir("{$dir}/{$file}") ) {
         self::rmdir_recursive("{$dir}/{$file}", 1);
       } else {
         \unlink("{$dir}/{$file}");
